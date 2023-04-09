@@ -26,7 +26,7 @@ module.exports.createPost = async (req, res) => {
     const newPost = new PostModel({
       posterId: req.body.posterId,
       message: req.body.message,
-      picture: "./uploads/posts/" + req.file.filename,
+      picture: "/uploads/posts/" + req.file.filename,
       likers: [],
       comments: [],
     });
@@ -241,3 +241,18 @@ module.exports.deleteCommentPost = (req, res) => {
     return res.status(500).send(err);
   }
 };
+
+
+module.exports.searchPost = async (req,res)=>{
+  const keyword = req.query.search
+  ? {
+    $or: [
+      { message: { $regex: req.query.search, $options: "i" } },
+    ],
+  }
+: {};
+const userSearched = await PostModel
+.find(keyword);
+res.status(200).send(userSearched);
+
+}

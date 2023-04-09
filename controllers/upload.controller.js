@@ -10,7 +10,7 @@ module.exports.uploaderProfile = (req, res) => {
       {
 
         $set: {
-          picture: "./uploads/profil/" + req.file.filename,
+          picture: "/uploads/profil/" + req.file.filename,
         },
       },
       { new: true, upsert: true, setDefaultsOnInsert: true },

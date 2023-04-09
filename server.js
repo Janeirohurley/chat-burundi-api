@@ -45,18 +45,45 @@ app.use("/api/message", messageRoutes);
 //code changed here
 
 //Add this before the app.get() block
+
+let onLineusers = []
+const addNewuser =  (userName,socketId) =>{
+  const existUser = onLineusers.find((user)=>user.userName === userName)
+  if(!existUser){
+    onLineusers.push({userName,socketId})
+    }
+  if(existUser){
+    console.log({message:"this user is online"})
+  }
+}
+
+
+const deleteUser = (socketId)=>{
+  onLineusers = onLineusers.filter((user)=>user.socketId !== socketId)
+}
+
+const getUser = (userName)=>{
+  return onLineusers.find((user)=>user.userName === userName)
+}
 socketIO.on("connection", (socket) => {
-  // console.log(`⚡: ${socket.id} user just connected!`);
-   socket.on("like",(data)=>{
-    socketIO.emit("likeResponse",data)
-   })
-      socket.on("unlike",(data)=>{
-     socketIO.emit("unlikeResponse",data)
-   })
+   socket.on("newuser",(userName)=>{
+    addNewuser(userName,socket.id)
 
+  socket.on("sendNotification",({senderName,postLiked,resverName,timeNot})=>{
+    let resever = getUser(resverName)
+    socketIO.to(resever?.socketId).emit("getNotification",{
+      senderName,postLiked,timeNot
+    }) 
+  })
 
+  socket.on("NewPost",({data})=>{
+    socketIO.emit("getNewpost",{data})
+  })
+    console.log(onLineusers)
+   })
   socket.on("disconnect", () => {
-    
+     // deleteUser(socket.id)
+      console.log(onLineusers)
   });
 });
 http.listen(process.env.PORT, () => {
