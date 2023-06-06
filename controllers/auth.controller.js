@@ -33,7 +33,7 @@ module.exports.signUp = async (req, res) => {
 
 module.exports.signin = async (req, res) => {
   const { pseudo, password } = req.body;
-
+   console.log(pseudo,password)
   try {
     const user = await userModels.login(pseudo, password);
     const token = createToken(user._id);

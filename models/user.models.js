@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { isEmail } = require("validator");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema(
   {
@@ -80,18 +81,36 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-userSchema.pre("save", async function (next) {
-  const salt = await bcrypt.genSalt();
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
+// userSchema.pre("save", async function (next) {
+//   const salt = await bcrypt.genSalt();
+//   this.password = await bcrypt.hash(this.password, salt);
+//   next();
+// });
+userSchema.pre("save", async function (next){
+  this.password = await crypto.createHash('sha256').update(this.password).digest('hex');
+  next()
+})
 
+// userSchema.statics.login = async function (pseudo, password) {
+//   const user = await this.findOne({ pseudo });
+
+//   if (user) {
+//     const auth = await bcrypt.compare(password, user.password);
+//     console.log(auth)
+//     if (auth) {
+//       return user;
+//     }
+//     throw Error("incorrect password");
+//   }
+//   throw Error("incorrect pseudo");
+// };
 userSchema.statics.login = async function (pseudo, password) {
   const user = await this.findOne({ pseudo });
 
   if (user) {
-    const auth = await bcrypt.compare(password, user.password);
-    if (auth) {
+    const cyptpassword = crypto.createHash('sha256').update(password).digest('hex');
+    console.log(cyptpassword + "from deb" + user.password)
+    if (cyptpassword === user.password) {
       return user;
     }
     throw Error("incorrect password");

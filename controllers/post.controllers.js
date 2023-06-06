@@ -41,6 +41,7 @@ module.exports.createPost = async (req, res) => {
     const newPost = new PostModel({
       posterId: req.body.posterId,
       message: req.body.message,
+      color:req.body.color,
       video: req.body.video,
       likers: [],
       comments: [],
@@ -59,6 +60,7 @@ module.exports.updatePost = (req, res) => {
     return res.status(400).send("ID unknown " + req.params.id);
   const updatedRecord = {
     message: req.body.message,
+    color:req.body.color
   };
 
   PostModel.findByIdAndUpdate(
@@ -68,7 +70,7 @@ module.exports.updatePost = (req, res) => {
     (err, docs) => {
       if (!err) {
         res.status(200).json(docs);
-        console.log(docs);
+        // console.log(docs);
       } else console.log("UPDATED ERROR " + err);
     }
   );
