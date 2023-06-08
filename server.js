@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const userRoutes = require("./routes/user.routes");
 const postRoutes = require("./routes/poster.routes");
 const chatRoutes = require("./routes/chat.router");
+const path = require("path")
 const messageRoutes = require("./routes/message.router");
 require("dotenv").config({ path: "./config/.env" });
 const { checkUser, requireAuth } = require("./middleware/auth.midleware");
@@ -45,6 +46,19 @@ app.use("/api/message", messageRoutes);
 //code changed here
 
 //Add this before the app.get() block
+//==========================================deployement==================================
+
+const __dirname1 = path.resolve()
+if(process.env.NODE_ENV === "production"){
+  app.use(express.static(path.join(__dirname1,"update-chat-burundi/build")))
+  app.get("*",(req,res)=>{
+    res.sendFile(path.resolve(__dirname1,"update-chat-burundi","build","index.html"))
+  })
+
+}else{
+  console.log("server is runing for development mode")
+}
+//==========================================deployement==================================
 
 let onLineusers = []
 let rooms = {};

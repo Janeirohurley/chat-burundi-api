@@ -3,7 +3,8 @@ const postControllers = require("../controllers/post.controllers");
 const multer = require("multer");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "../update-chat-burundi/public/uploads/posts");
+    // cb(null, "../update-chat-burundi/public/uploads/posts");
+    cb(null, "./update-chat-burundi/build/uploads/posts");
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);

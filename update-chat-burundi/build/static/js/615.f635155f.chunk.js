@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkupdate_chat_burundi=self.webpackChunkupdate_chat_burundi||[]).push([[615],{367:function(t,n,e){e(2791);var u=e(184);n.Z=function(t){return document.title="Chat Burundi - "+t.title,(0,u.jsx)("div",{className:"w-100",children:t.children})}},5615:function(t,n,e){e.r(n);e(2791);var u=e(367),i=e(184);n.default=function(){return(0,i.jsx)(u.Z,{title:"Settings",children:(0,i.jsx)("div",{children:"Settings"})})}}}]);
+//# sourceMappingURL=615.f635155f.chunk.js.map
