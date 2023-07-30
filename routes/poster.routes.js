@@ -1,18 +1,22 @@
 const router = require("express").Router();
 const postControllers = require("../controllers/post.controllers");
 const multer = require("multer");
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    // cb(null, "../update-chat-burundi/public/uploads/posts");
-    cb(null, "./update-chat-burundi/build/uploads/posts");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + file.originalname);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     if(process.env.NODE_ENV === "development"){    
+//     cb(null, "../update-chat-burundi/public/uploads/posts");
+//     }
+//     if(process.env.NODE_ENV === "production"){
+//     cb(null, "./update-chat-burundi/build/uploads/posts"); 
+//     }
+//   },
+//   filename: function (req, file, cb) {
+//     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+//     cb(null, uniqueSuffix + file.originalname);
+//   },
+// });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage() });
 
 router.get("/", postControllers.readPost); //fetch all posts
 router.get("/:id", postControllers.findPost); //find post by id

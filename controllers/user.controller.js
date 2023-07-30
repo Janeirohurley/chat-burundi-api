@@ -1,6 +1,9 @@
 const userModels = require("../models/user.models");
 const Chat = require("../models/ChatModel");
 const ObjectId = require("mongoose").Types.ObjectId;
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, ""); // $& means the whole matched string
+}
 
 module.exports.getAllUsers = async (req, res) => {
   const users = await userModels.find().select("-password");
@@ -19,27 +22,21 @@ module.exports.userInfo = (req, res) => {
     .select("-password");
 };
 
-
-
 module.exports.findNotification = (req, res) => {
   if (!ObjectId.isValid(req.params.id))
     return res.status(400).send("ID unknown " + req.params.id);
 
-  userModels
-    .findById(req.params.id, (err, docs) => {
-      const theNotifications = docs.notifications 
-      theNotifications.forEach((notification) => {
-        notification.status = "viewed"
-      })
-       return docs.save((err) => {
-        if (!err) return res.status(200).send(docs.notifications)
-        else return res.status(500).send(err);
-      });
-    })
+  userModels.findById(req.params.id, (err, docs) => {
+    const theNotifications = docs.notifications;
+    theNotifications.forEach((notification) => {
+      notification.status = "viewed";
+    });
+    return docs.save((err) => {
+      if (!err) return res.status(200).send(docs.notifications);
+      else return res.status(500).send(err);
+    });
+  });
 };
-
-
-
 
 module.exports.updateUser = async (req, res) => {
   if (!ObjectId.isValid(req.params.id))
@@ -77,6 +74,7 @@ module.exports.updateUserPssword = async (req, res) => {
       });
     } else {
       user.password = req.body.newpassword;
+      user.requestChangePassword = false;
       await user.save();
       res.status(200).send({ message: "password changed successifully" });
     }
@@ -254,21 +252,19 @@ module.exports.unsavepost = (req, res) => {
 };
 
 module.exports.searchUser = async (req, res) => {
-  if(req.search !== "*"||req.search !== "\'"){
-   const keyword = req.query.search
-    ? {
-        $or: [
-          { pseudo: { $regex: req.query.search, $options: "i" } },
-        ],
-      }
-    : {};
-  const userSearched = await userModels
-    .find(keyword)
-    .find({ _id: { $ne: req.user._id } });
-  res.status(200).send(userSearched);
-}; 
+   if(escapeRegExp(req.query.search).length > 0){
+    const keyword = escapeRegExp(req.query.search).trim()
+      ? {
+          $or: [{ pseudo: { $regex: escapeRegExp(req.query.search), $options: "i" } }],
+        }
+      : {};
+    const userSearched = await userModels
+      .find(keyword)
+      .find({ _id: { $ne: req.user._id } });
+    res.status(200).send(userSearched);
   }
-  
+};
+
 //==================================/create group chat//==================================
 
 module.exports.createGroupe = async (req, res) => {
@@ -284,9 +280,7 @@ module.exports.createGroupe = async (req, res) => {
   }
   const Group = await Chat.findOne({ chatName: req.body.name });
   if (Group)
-    return res
-      .status(500)
-      .send("Group with that name exits use others");
+    return res.status(500).send("Group with that name exits use others");
   users.push(req.user);
 
   try {

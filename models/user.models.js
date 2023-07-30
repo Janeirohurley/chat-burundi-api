@@ -34,6 +34,10 @@ const userSchema = new mongoose.Schema(
     OTP: {
       type: String,
     },
+    requestChangePassword:{
+      type:"boolean",
+      default:false
+    },
     timerLink: {
       type: Number,
     },

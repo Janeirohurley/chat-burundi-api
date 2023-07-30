@@ -18,9 +18,9 @@ module.exports.errorSignup = (err) => {
 module.exports.errorSign = (err) => {
   let errors = { pseudo: "", password: "" };
   if (err.message.includes("pseudo"))
-    errors.pseudo = "votre pseudo est incorrecte";
+    errors.pseudo = "incorrecte pseudo or password";
   if (err.message.includes("password"))
-    errors.password = "votre mot de passe est incorrecte";
+    errors.password = "incorrecte pseudo or password";
   return errors;
 };
 

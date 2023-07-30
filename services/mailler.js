@@ -32,7 +32,7 @@ exports.sendGmail = (name, emailCrypted, email) => {
 //send otp methods
 
 
-exports.sendOtp = (name, otp, email) => {
+exports.sendOtp = (name, otp, email,res) => {
   var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -50,9 +50,11 @@ exports.sendOtp = (name, otp, email) => {
 
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      console.log(error.message);
+      console.log("error: "+ res);
+      res.status(200).send({error:"something went wrong please try again "})
     } else {
-      console.log('Email sent: ' + info.response);
+      console.log('Email sent: ' + res);
+      res.status(200).send({message:"your OTP varification was sent to ur email "})
     }
   });
 };
