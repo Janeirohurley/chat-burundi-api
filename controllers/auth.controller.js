@@ -26,13 +26,18 @@ const createToken = (id) => {
 module.exports.signUp = async (req, res) => {
   const { pseudo, email, password } = req.body;
  if(pseudo.replace(/\s+/,"").length && password.replace(/\s+/,"").length && email.replace(/\s+/,"").length ){
-  try {
-    const user = await userModels.create({ pseudo, email, password });
-    res.status(201).json({ user: user?._id });
-  } catch (err) {
-    const errors = errorSignup(err);
-    res.status(200).send({ errors });
-  }
+     const newUser = new userModels({
+      pseudo : pseudo,
+      email:email,
+      password:password
+     });
+    try { 
+      const user = await newUser.save();
+      return res.status(201).json(user); 
+    } catch (err) {
+      const er = errorSignup(err);
+      return res.status(200).send({errors:er});
+    }
  }else{
    res.status(200).send({ errors: {message:"all input are requered"} });
  }
