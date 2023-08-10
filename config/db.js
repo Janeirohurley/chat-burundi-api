@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 mongoose.set("strictQuery", true)
 mongoose
   .connect(
-    "mongodb://127.0.0.1:27017/chat-burundi",
+    "mongodb+srv://janeiro:bujumbura@cluster0.p0uwbag.mongodb.net/chat_burundi",
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
