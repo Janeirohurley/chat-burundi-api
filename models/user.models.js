@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const { isEmail } = require("validator");
+const bcrypt = require("bcrypt");
+// const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema(
   {
@@ -58,8 +60,14 @@ const userSchema = new mongoose.Schema(
     phone: {
       type: String,
     },
+    fullName : {
+    type : String,
+    },
     sociale: {
       type: [String],
+    },
+    professionnal: {
+      type: String,
     },
     saved: {
       type: [String],

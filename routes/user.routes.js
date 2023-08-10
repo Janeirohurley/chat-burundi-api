@@ -5,17 +5,17 @@ const uploadController = require("../controllers/upload.controller");
 const historyController = require("../controllers/history.controller")
 const multer = require("multer");
 const {protect} = require("../middleware/auth.midleware")
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "../update-chat-burundi/public/uploads/profil");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + file.originalname);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "../update-chat-burundi/public/uploads/profil");
+//   },
+//   filename: function (req, file, cb) {
+//     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+//     cb(null, uniqueSuffix + file.originalname);
+//   },
+// });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage() });
 
 router.post("/register", authController.signUp);
 router.post("/login", authController.signin);

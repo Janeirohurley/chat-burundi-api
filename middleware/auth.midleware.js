@@ -11,6 +11,9 @@ module.exports.checkUser = (req, res, next) => {
         next();
       } else {
         let user = await userModels.findById(decodedToken.id);
+        if(user === null){
+        res.cookie("jwt", "", { maxAge: 1 });
+        }
         res.locals.user = user;
         next();
       }
