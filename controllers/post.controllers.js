@@ -45,38 +45,6 @@ module.exports.findPost = (req, res) => {
 };
 
 module.exports.createPost = async (req, res) => {
-  //if file picture exist
-  // if (req.file) {
-  //   const newPost = new PostModel({
-  //     posterId: req.body.posterId,
-  //     message: req.body.message,
-  //     picture: "/uploads/posts/" + req.file.filename,
-  //     likers: [],
-  //     comments: [],
-  //   });
-
-  //   try {
-  //     const post = await newPost.save();
-  //     return res.status(201).json(post);
-  //   } catch (error) {
-  //     return res.status(400).send(error);
-  //   }
-  // } else {
-  //   const newPost = new PostModel({
-  //     posterId: req.body.posterId,
-  //     message: req.body.message,
-  //     color: req.body.color,
-  //     video: req.body.video,
-  //     likers: [],
-  //     comments: [],
-  //   });
-  //   try {
-  //     const post = await newPost.save();
-  //     return res.status(201).json(post);
-  //   } catch (error) {
-  //     return res.status(400).send(error);
-  //   }
-  // }
    if(req.file){
     //lorsquer on en presence d'une photo
       try {

@@ -42,6 +42,7 @@ router.patch("/follow/:id", userControllers.follow);
 router.patch("/unfollow/:id", userControllers.unfollow);
 
 router.post("/upload/",upload.single("file"),uploadController.uploaderProfile);
+router.post("/upload/thumber",uploadController.uploaderProfileThumber);
 router.put("/savepost/:id",userControllers.savepost)
 router.put("/unsavepost/:id",userControllers.unsavepost)
 

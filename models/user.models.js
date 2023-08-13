@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "/uploads/profil/rendom-user.png",
     },
+    thumber: {
+      type: String,
+      default: "/uploads/profil/rendom-user.png",
+    },
     password: {
       type: String,
       required: true,

@@ -25,37 +25,63 @@ const storage = firebase.getStorage();
 module.exports.uploaderProfile = async(req, res) => {
   if (!ObjectId.isValid(req.body.userId))
     return res.status(400).send("ID unknown " + req.body.userId);
-    try {
+        try {
         const datetime = giveCurrentDateTime()
-        const storageRef = firebase.ref(storage, `profile/${req.file.originalname + "   " + datetime}`);
+        const storageRef = firebase.ref(storage, `profil/${req.file.originalname + "   " + datetime}`);
         const metadata = {
             contentType: req.file.mimetype,
         }
         const snapshot = await firebase.uploadBytesResumable(storageRef, req.file.buffer, metadata);
         const downloadURL = await firebase.getDownloadURL(snapshot.ref);
         if(downloadURL){
-      try {
-        return userModels.findByIdAndUpdate(
-          { _id: req.body.userId },
-          {
+            try {
+            return userModels.findByIdAndUpdate(
+            { _id: req.body.userId },
+            {
 
             $set: {
-              picture: downloadURL,
+            picture:downloadURL,
             },
-          },
-          { new: true, upsert: true, setDefaultsOnInsert: true },
-        ).then((err, docs) => {
-          if (!err) return res.send(docs)
-          else return res.status(200).send(err)
-        })
+            },
+            { new: true, upsert: true, setDefaultsOnInsert: true },
+            ).then((err, docs) => {
+            if (!err) return res.send(docs)
+            else return res.status(200).send(err)
+            })
 
-      } catch (err) {
-        return res.status(400).send({ message: "error while uploading image in mongo db" })
-      }
+            } catch (err) {
+            return res.status(500).send({ message: "error while uploading image" })
+            }
+
         }else{
           res.status(200).send({error :"error while uploading image to fire base"});
         }
     } catch (error) {
         console.log(error)
     }
+}
+
+
+
+module.exports.uploaderProfileThumber = async(req, res) => {
+   if (!ObjectId.isValid(req.body.userId))
+    return res.status(400).send("ID unknown " + req.body.userId);
+            try {
+            return userModels.findByIdAndUpdate(
+            { _id: req.body.userId },
+            {
+
+            $set: {
+            thumber:req.body.file,
+            },
+            },
+            { new: true, upsert: true, setDefaultsOnInsert: true },
+            ).then((err, docs) => {
+            if (!err) return res.send(docs)
+            else return res.status(200).send(err)
+            })
+
+            } catch (err) {
+            return res.status(500).send({ message: "error while uploading image" })
+            }
 }
