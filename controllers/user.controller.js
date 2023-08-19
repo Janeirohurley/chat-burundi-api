@@ -368,7 +368,7 @@ module.exports.addTogroup = async (req, res) => {
 //==================================//access to the chats or create new chats //======================================================
 module.exports.fetchChat = async (req, res) => {
   try {
-    await Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
+    await Chat.find({ users: { $elemMatch: { $eq: req.params.userId } } })
       .populate("users", "-password")
       .populate("groupAdmin", "-password")
       .populate("latestMessage", "-password")
@@ -382,7 +382,8 @@ module.exports.fetchChat = async (req, res) => {
       });
   } catch (error) {
     res.status(400);
-    throw new Error(error.message);
+    console.log(JSON.stringify(error.value))
+
   }
 };
 

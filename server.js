@@ -141,7 +141,13 @@ socket.on("join chat", (room, userId) => {
   socket.join(room);
 });
 socket.on("new message", (data) => {
- socketIO.emit("message received", data); 
+  const sendTo = onLineusers?.find((user)=>user?.userName === data?.recepient?._id)
+ socketIO.to(sendTo?.socketId).emit("message received", data); 
+ socketIO.to(sendTo?.socketId).emit("akiraNotification", {
+  senderId:data?.sender?._id,
+  isRead:false,
+  date:new Date()
+ }); 
 });
 
 socket.on("typing",(typingInfo)=>{
