@@ -151,10 +151,12 @@ socket.on("new message", (data) => {
 });
 
 socket.on("typing",(typingInfo)=>{
-    socketIO.emit("istyping",typingInfo)
+    const sendTo = onLineusers?.find((user)=>user?.userName === typingInfo?.recepient?._id)
+    socketIO.to(sendTo?.socketId).emit("istyping",typingInfo)
 })
 socket.on("notyping",(notypingInfo)=>{
-    socketIO.emit("isnottyping",notypingInfo)
+    const sendTo = onLineusers?.find((user)=>user?.userName === notypingInfo?.recepient?._id)
+    socketIO.to(sendTo?.socketId).emit("isnottyping",notypingInfo)
     
 })
 
